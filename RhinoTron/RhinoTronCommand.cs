@@ -31,7 +31,41 @@ namespace RhinoTron
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-            RhinoApp.WriteLine("The {0} command is under construction.", EnglishName);
+            var enabled = RhinoEventHandlers.Instance.IsEnabled;
+            var prompt = enabled ? "Event watcher is enabled. New value" : "Event watcher is disabled. New value";
+
+            var go = new GetOption();
+            go.SetCommandPrompt(prompt);
+            go.AcceptNothing(true);
+
+            var d_option = go.AddOption("Disable");
+            var e_option = go.AddOption("Enable");
+            var t_option = go.AddOption("Toggle");
+
+            var res = go.Get();
+            if (res == GetResult.Nothing)
+                return Result.Success;
+            if (res != GetResult.Option)
+                return Result.Cancel;
+
+            var option = go.Option();
+            if (null == option)
+                return Result.Failure;
+
+            if (d_option == option.Index)
+            {
+                if (enabled)
+                    RhinoEventHandlers.Instance.Enable(false);
+            }
+            else if (e_option == option.Index)
+            {
+                if (!enabled)
+                    RhinoEventHandlers.Instance.Enable(true);
+            }
+            else if (t_option == option.Index)
+            {
+                RhinoEventHandlers.Instance.Enable(!enabled);
+            }
 
             return Result.Success;
         }

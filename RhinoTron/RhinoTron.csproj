@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RhinoEventHandlers.cs" />
     <Compile Include="RhinoTronCommand.cs" />
     <Compile Include="RhinoTronPlugIn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
